@@ -8,25 +8,26 @@ productRouter.post("/product", (req, res) => {
   const {
     title,
     description,
-    rating,
-    stock,
     price,
     mrp,
-    currency
+    stock = 0,
+    brand,
+    category
   } = req.body;
 
-  if (!title || !price || !mrp) {
-    return res.status(400).json({ message: "Invalid input" });
+  if (!title || !price) {
+    return res.status(400).json({ message: "title and price are required" });
   }
 
   const product = productStore.create({
     title,
     description,
-    rating,
-    stock,
     price,
-    mrp,
-    currency
+    mrp: mrp ?? price,
+    stock,
+    brand,
+    category,
+    source: "manual"
   });
 
   res.status(201).json({
@@ -35,14 +36,20 @@ productRouter.post("/product", (req, res) => {
 });
 
 
+
 // 2️⃣ Update Metadata
 productRouter.put("/product/meta-data", (req, res) => {
-  const { productId, Metadata } = req.body;
+  const { productId, metadata, stock, mrp } = req.body;
 
-  const updatedProduct = productStore.updateMetadata(
-    productId,
-    Metadata
-  );
+  if (!productId) {
+    return res.status(400).json({ message: "productId required" });
+  }
+
+  const updatedProduct = productStore.updateProduct(productId, {
+    metadata,
+    stock,
+    mrp
+  });
 
   if (!updatedProduct) {
     return res.status(404).json({ message: "Product not found" });
@@ -50,8 +57,11 @@ productRouter.put("/product/meta-data", (req, res) => {
 
   res.json({
     productId: updatedProduct.productId,
-    Metadata: updatedProduct.metadata
+    metadata: updatedProduct.metadata,
+    stock: updatedProduct.stock,
+    mrp: updatedProduct.mrp
   });
 });
+
 
 module.exports = productRouter;

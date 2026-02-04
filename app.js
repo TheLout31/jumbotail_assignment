@@ -23,8 +23,8 @@ async function init() {
     products.forEach((product) => {
       productStore.create(product);
     });
-    // let dummy = productStore.getAll();
-    console.log(products);
+    let dummy = productStore.getAll();
+    console.log(dummy);
     console.log(`Loaded ${products.length} products`);
   } catch (error) {
     console.error("❌ Bootstrap failed:", error.message);
