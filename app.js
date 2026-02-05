@@ -1,11 +1,9 @@
 const express = require("express");
-const scrapeProducts = require("./bootstrap/scrapeProducts");
 const productStore = require("./store/productStore");
 const productRouter = require("./routes/product.route");
 const searchRouter = require("./routes/search.route");
-const scrapeAmazonProducts = require("./bootstrap/scrapeAmazonProducts");
-const app = express();
 
+const app = express();
 app.use(express.json());
 
 app.use("/api/v1", productRouter);
@@ -15,21 +13,22 @@ app.get("/", (req, res) => {
   res.json({ message: "Server working fine!!" });
 });
 
-async function init() {
+// 🔥 BOOTSTRAP FROM JSON
+function init() {
   try {
-    console.log("Bootstrapping products...");
+    console.log("📦 Loading products from JSON...");
 
-    const products = await scrapeAmazonProducts();
+    const products = require("./data/products.json");
 
-    if (!products || !products.length) {
-      throw new Error("No products returned from scraper");
+    if (!Array.isArray(products) || products.length === 0) {
+      throw new Error("products.json is empty or invalid");
     }
-    products.forEach((product) => {
+
+    products.forEach(product => {
       productStore.create(product);
     });
-    let dummy = productStore.getAll();
-    console.log(dummy);
-    console.log(`Loaded ${products.length} products`);
+
+    console.log(`✅ Loaded ${products.length} products into memory`);
   } catch (error) {
     console.error("❌ Bootstrap failed:", error.message);
   }

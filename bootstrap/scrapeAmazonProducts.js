@@ -2,8 +2,8 @@ const { chromium } = require("playwright");
 const Product = require("../models/Product");
 const generateMetrics = require("./generateMetrics");
 
-const MAX_PRODUCTS = 200;
-const MAX_PAGES = 10;
+const MAX_PRODUCTS = 300;
+const MAX_PAGES = 20;
 
 async function scrapeAmazonProducts() {
   const browser = await chromium.launch({ headless: true });
