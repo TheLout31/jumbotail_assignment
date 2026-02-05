@@ -1,4 +1,4 @@
-const { v4: uuidv4 } = require("uuid");
+const crypto = require("crypto");
 
 class Product {
   constructor({
@@ -10,17 +10,14 @@ class Product {
     metadata,
     metrics
   }) {
-    this.id = uuidv4();
+    this.id = crypto.randomUUID(); 
     this.title = title;
     this.brand = brand;
     this.category = category;
     this.price = price;
-
     this.description = description;
-
     this.metadata = metadata || {};
-
-    this.metrics = metrics;
+    this.metrics = metrics || {};
   }
 }
 

@@ -11,6 +11,10 @@ app.use(express.json());
 app.use("/api/v1", productRouter);
 app.use("/api/v1", searchRouter);
 
+app.get("/", (req, res) => {
+  res.json({ message: "Server working fine!!" });
+});
+
 async function init() {
   try {
     console.log("Bootstrapping products...");
