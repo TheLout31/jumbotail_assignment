@@ -27,8 +27,9 @@ The goal of this project is to build a backend microservice that:
 ---
 
 ## 📁 Project Structure
-
-src/
+ 
+ ```
+ src/
 │
 ├── bootstrap/
 │ ├── scrapeAmazon.js # Scrapes product listings from Amazon
@@ -50,6 +51,8 @@ src/
 ├── app.js # App initialization & bootstrapping
 └── server.js # Server entry point
 
+```
+
 ## 🚀 Bootstrapping Products
 
 On server startup:
@@ -64,19 +67,19 @@ On server startup:
    - Complaints
 4. Products are stored in-memory
 
-```js
+```
 scrapeAmazon() → Product[] → productStore
-
+```
 ## 🚀 API ENDPOINTS
-
+```
 POST /api/v1/product
 
 PUT /api/v1/product/meta-data
 
 GET /api/v1/search/product?query=sasta iphone
-
-## Library Used - 
-
+```
+## Library Used 
+```
 | Library | Purpose                    |
 | ------- | -------------------------- |
 | express | Web framework              |
@@ -84,4 +87,6 @@ GET /api/v1/search/product?query=sasta iphone
 | cheerio | HTML parsing for scraping  |
 | uuid    | Unique product identifiers |
 | nodemon | Development auto-reload    |
+| Fuse.js | typo-search functionality  |
+```
 
