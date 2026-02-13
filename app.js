@@ -1,8 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-// const helmet = require("helmet");
-// const cors = require("cors");
-// const morgan = require("morgan");
+const cors = require("cors");
 
 
 const router = require("./routes/index");
@@ -16,9 +14,8 @@ const PORT = process.env.PORT || 3000;
 // ──────────────────────────────────────────────
 // Security & middleware
 // ──────────────────────────────────────────────
-// app.use(helmet());
-// app.use(cors());
-// app.use(morgan("dev"));
+
+app.use(cors());
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 

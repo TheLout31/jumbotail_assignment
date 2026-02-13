@@ -148,7 +148,7 @@ const productSchema = new mongoose.Schema(
       index: "text",
     },
     color: { type: String, trim: true },
-    isActive: { type: Boolean, default: true, index: true },
+    isActive: { type: Boolean, default: true },
     launchYear: { type: Number },
   },
   {

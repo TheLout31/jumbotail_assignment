@@ -11,7 +11,7 @@ router.use("/search", searchRoutes);
 // Catalog stats
 router.get("/catalog/stats", async (req, res, next) => {
   try {
-    const productService = require("../services/product.service");
+    const productService = require("../services/productServices");
     const count = await productService.getCatalogCount();
     res.json({
       success: true,
