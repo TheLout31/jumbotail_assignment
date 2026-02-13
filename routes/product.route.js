@@ -1,14 +1,28 @@
 const express = require("express");
-const productRouter = express.Router();
+const router = express.Router();
 const {
-  postProduct,
+  storeProduct,
+  updateMetadata,
+  getProduct,
+  listProducts,
   updateProduct,
+  removeProduct,
 } = require("../controllers/product.controller");
 
-// 1️⃣ Store Product in Catalog
-productRouter.post("/product", postProduct);
+/**
+ * POST   /api/v1/product          — Create a product
+ * GET    /api/v1/product          — List all products (paginated)
+ * GET    /api/v1/product/:id      — Get single product
+ * PATCH  /api/v1/product/:id      — Update product fields
+ * DELETE /api/v1/product/:id      — Soft-delete product
+ * PUT    /api/v1/product/meta-data — Update product metadata
+ */
 
-// 2️⃣ Update Metadata
-productRouter.put("/product/meta-data", updateProduct);
+router.post("/", storeProduct);
+router.get("/", listProducts);
+router.put("/meta-data", updateMetadata);  // Must come before /:id
+router.get("/:id", getProduct);
+router.patch("/:id", updateProduct);
+router.delete("/:id", removeProduct);
 
-module.exports = productRouter;
+module.exports = router;

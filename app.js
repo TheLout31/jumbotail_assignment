@@ -1,39 +1,70 @@
+require("dotenv").config();
 const express = require("express");
-const productStore = require("./store/productStore");
-const productRouter = require("./routes/product.route");
-const searchRouter = require("./routes/search.route");
+// const helmet = require("helmet");
+// const cors = require("cors");
+// const morgan = require("morgan");
+
+
+const router = require("./routes/index");
+
+const connectToDB = require("./config/mongodb.config");
+const errorHandler = require("./middleware/errorhandler");
 
 const app = express();
-app.use(express.json());
+const PORT = process.env.PORT || 3000;
 
-app.use("/api/v1", productRouter);
-app.use("/api/v1", searchRouter);
+// ──────────────────────────────────────────────
+// Security & middleware
+// ──────────────────────────────────────────────
+// app.use(helmet());
+// app.use(cors());
+// app.use(morgan("dev"));
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
-  res.json({ message: "Server working fine!!" });
+// ──────────────────────────────────────────────
+// Health check
+// ──────────────────────────────────────────────
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+  });
 });
 
-// 🔥 BOOTSTRAP FROM JSON
-function init() {
-  try {
-    console.log("📦 Loading products from JSON...");
+// ──────────────────────────────────────────────
+// API routes
+// ──────────────────────────────────────────────
+app.use("/api/v1", router);
 
-    const products = require("./data/products.json");
+// ──────────────────────────────────────────────
+// 404 handler
+// ──────────────────────────────────────────────
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `Route ${req.method} ${req.originalUrl} not found`,
+  });
+});
 
-    if (!Array.isArray(products) || products.length === 0) {
-      throw new Error("products.json is empty or invalid");
-    }
+// ──────────────────────────────────────────────
+// Global error handler
+// ──────────────────────────────────────────────
+app.use(errorHandler);
 
-    products.forEach(product => {
-      productStore.create(product);
-    });
+// ──────────────────────────────────────────────
+// Boot
+// ──────────────────────────────────────────────
+const start = async () => {
+  await connectToDB();
+  app.listen(PORT, () => {
+    console.log(`\n🚀  Server running on http://localhost:${PORT}`);
+    console.log(`📦  Environment : ${process.env.NODE_ENV || "development"}`);
+    console.log(`🏥  Health check: http://localhost:${PORT}/health\n`);
+  });
+};
 
-    console.log(`✅ Loaded ${products.length} products into memory`);
-  } catch (error) {
-    console.error("❌ Bootstrap failed:", error.message);
-  }
-}
-
-init();
+start();
 
 module.exports = app;
