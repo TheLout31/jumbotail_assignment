@@ -171,12 +171,12 @@ productSchema.virtual("computedDiscount").get(function () {
 // ──────────────────────────────────────────────
 // Pre-save: auto-compute discountPercent & normalise currency
 // ──────────────────────────────────────────────
-productSchema.pre("save", function (next) {
+productSchema.pre("save", function () {
   if (this.mrp && this.mrp > 0) {
     this.discountPercent = Math.round(((this.mrp - this.price) / this.mrp) * 100);
   }
   if (this.currency === "Rupee") this.currency = "INR";
-  next();
+  
 });
 
 // ──────────────────────────────────────────────

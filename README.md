@@ -9,10 +9,10 @@ A Node.js + Express microservice that bootstraps product data (scraped from Amaz
 The goal of this project is to build a backend microservice that:
 
 - Bootstraps **1000+ products** from the web (Amazon scraping)
-- Stores product data **in-memory**
+- Stores product data **in-memory** or **MongoDB**
 - Allows enriching products with metadata
 - Supports a **search API with intelligent ranking**
-- Demonstrates real-world backend design & search logic
+- Demonstrates real-world E-commerce backend design & search logic
 
 ---
 
@@ -20,9 +20,8 @@ The goal of this project is to build a backend microservice that:
 
 
 - **Data Source**: Amazon (scraped)
-- **Storage**: In-memory (array-based)
+- **Storage**: MongoDB OR in-memory fallback
 - **Search**: Token-based relevance + weighted ranking
-- **Persistence**: Not used (as per requirement)
 
 ---
 
@@ -65,7 +64,7 @@ On server startup:
    - Sales
    - Return rate
    - Complaints
-4. Products are stored in-memory
+4. Products are stored in-memory or MongoDB
 
 ```
 scrapeAmazon() → Product[] → productStore
@@ -89,4 +88,6 @@ GET /api/v1/search/product?query=sasta iphone
 | nodemon | Development auto-reload    |
 | Fuse.js | typo-search functionality  |
 ```
-
+## LLM AI Conversation code
+Chat GPT - https://chatgpt.com/share/6992f5d8-ccb0-800d-b578-f986ae92740d
+           https://chatgpt.com/share/6992f610-e514-800d-81ee-dff479c10945
